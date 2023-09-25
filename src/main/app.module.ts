@@ -7,7 +7,7 @@ import * as process from 'process';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.prod',
+      envFilePath: `config/.env.${process.env.NODE_ENV}`,
     }),
   ],
   controllers: [AppController],

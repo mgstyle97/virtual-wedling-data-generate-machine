@@ -1,0 +1,3 @@
+[submodule "config"]
+	path = config
+	url = git@github.com:mgstyle97/virtual-machine-config.git
