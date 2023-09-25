@@ -1,4 +1,7 @@
 This file shows the history of the application.
 
+v 2023.38.1
+    - Nest.js MQTT 기본 설정 (#2)
+
 v 2023.38.0
     - 프로젝트 기본 설정 (#1)
