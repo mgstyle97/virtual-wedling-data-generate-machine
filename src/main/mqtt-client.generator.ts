@@ -13,7 +13,7 @@ export default (config: ConfigService) => {
       password: config.get<string>('PASSWORD'),
       protocolVersion: 4,
     };
-
+    
     const client =
       config.get<string>('NODE_ENV') !== 'test'
         ? connect(config.get<string>('BROKER_URL'), clientOption)
