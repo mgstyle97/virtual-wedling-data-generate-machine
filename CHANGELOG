@@ -1,5 +1,8 @@
 This file shows the history of the application.
 
+v 2023.38.2
+    - CSV Parsing 구현 (#8)
+
 v 2023.38.1
     - Nest.js MQTT 기본 설정 (#2)
 
