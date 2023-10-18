@@ -4,7 +4,7 @@
 ### Setting Files ###
 .env*
 !.env.template
-
+*.log
 ### Linux ###
 *~
 
