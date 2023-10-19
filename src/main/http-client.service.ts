@@ -3,24 +3,8 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import CsvParser from '@main/csv.parser';
-
-class WeldingData {
-  constructor(
-    private readonly machineName: string,
-    private readonly itemNo: string,
-    private readonly workingTime: Date,
-    private readonly thicknessOne: number,
-    private readonly thicknessTwo: number,
-    private readonly weldForce: number,
-    private readonly weldCurrent: number,
-    private readonly weldVoltage: number,
-    private readonly weldTime: number,
-    private readonly scaledWeldForce: string,
-    private readonly scaledWeldCurrent: string,
-    private readonly scaledWeldVoltage: string,
-    private readonly scaledWeldTime: string,
-  ) {}
-}
+import WeldingData from '@main/welding-data';
+import WeldingDataParser from '@main/welding-data.parser';
 
 let dataSequence: number = 0;
 let requestSequence: number = 1;
@@ -53,23 +37,7 @@ export default class HttpClientService implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     this.records = await CsvParser(this.sensingDataPath);
     for (const record of this.records) {
-      this.dataList.push(
-        new WeldingData(
-          record[1],
-          record[2],
-          new Date(record[3]),
-          Number(record[4]),
-          Number(record[5]),
-          Number(record[6]),
-          Number(record[7]),
-          Number(record[8]),
-          Number(record[9]),
-          record[10],
-          record[11],
-          record[12],
-          record[13],
-        ),
-      );
+      this.dataList.push(WeldingDataParser(record));
     }
   }
 
@@ -80,13 +48,21 @@ export default class HttpClientService implements OnModuleInit {
       const index = dataSequence % dataList.length;
       const body: WeldingData = dataList[index];
 
-      Promise.resolve(
-        client.axiosRef.post('/sensing', body, {
-          headers: {
-            'Global-Request-Sequence': requestSequence,
-          },
-        }),
-      ).catch(() => {});
+      if (body !== undefined) {
+        Promise.resolve(
+          client.axiosRef.post('/sensing', body, {
+            headers: {
+              'Global-Request-Sequence': requestSequence,
+              'Content-Type': 'application/json',
+            },
+          }),
+        ).catch((err) => {
+          if (err.errno === -104)
+            console.error(
+              `Request Sequence - ${requestSequence}: Out of Socket Count`,
+            );
+        });
+      }
     }
 
     console.timeEnd(`requestLabel - ${requestSequence}`);

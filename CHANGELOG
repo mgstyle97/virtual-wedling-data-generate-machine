@@ -1,5 +1,11 @@
 This file shows the history of the application.
 
+v 2023.42.1
+    - 비동기 데이터 손실 처리 및 소켓 부족 에러 로그 추가 (#12)
+
+v 2023.42.0
+    - Http Client 구현 (#10)
+
 v 2023.38.2
     - CSV Parsing 구현 (#8)
 
