@@ -35,7 +35,7 @@ export default class HttpClientService implements OnModuleInit {
   }
 
   async onModuleInit(): Promise<void> {
-    this.records = await CsvParser(this.sensingDataPath);
+    this.records = await CsvParser.csvFileToRecords(this.sensingDataPath);
     for (const record of this.records) {
       this.dataList.push(WeldingDataParser(record));
     }
